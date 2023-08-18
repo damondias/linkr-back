@@ -8,5 +8,10 @@ export async function getPostsHashTag(hashtag){
     return db.query(`SELECT posts.* FROM posts 
     JOIN hashtagPost ON posts.id = hashtagPost."postId"
     JOIN hashtags ON hashtagPost."postId" = hashtags.id
-    WHERE hashtags.tag = $1`,[hashtag])
+    WHERE hashtags.tag = $1
+    ORDER BY posts.id DESC`,[hashtag])
+}
+
+export async function createHashtag(hashtag){
+    return db.query(`INSERT INTO hashtags (tag) VALUES ($1) RETURNING id`,[hashtag])
 }
