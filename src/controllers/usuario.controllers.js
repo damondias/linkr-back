@@ -44,7 +44,7 @@ export async function login(req, res){
 
     try{
 
-        const verificadorLogin = await db.query(`SELECT * FROM sessions WHERE email = $1`, [email])
+        const verificadorLogin = await db.query(`SELECT * FROM users WHERE email = $1`, [email])
 
         if (verificadorLogin.rowCount === 0) {
             return res.sendStatus(401);
@@ -61,12 +61,12 @@ export async function login(req, res){
 
         const token = uuid();
 
-        const login = await db.query('INSERT INTO sessions (user_id, token) VALUES ($1, $2);', [user.id, token])
+        const login = await db.query('INSERT INTO sessions ("userId", token) VALUES ($1, $2);', [user.id, token])
 
         res.status(200).send({token})
 
     } catch(err){
-        res.status(500).send(err.message);
+        res.status(500).send({ErrorLogin: err.message});
 
     }
 }
