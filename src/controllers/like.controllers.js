@@ -34,7 +34,7 @@ export async function getLikes(req, res) {
         const postLikers = await queryPostLikers(postId);
         const userLikes = await queryUserLikes(userId, postId);
 
-        console.log(userLikes)
+        console.log(likes.rows[0])
 
         if (likes.rows[0].count === '0'){
             return res.send({
