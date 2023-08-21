@@ -19,7 +19,7 @@ export async function queryDislike(userId, postId) {
 export async function queryGetLikes(postId) {
 
     return db.query(`
-        SELECT postId, COUNT("userId")
+        SELECT "postId", COUNT("userId")
         FROM likes
         WHERE "postId" = $1
         GROUP BY postId 
