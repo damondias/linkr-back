@@ -45,7 +45,7 @@ export async function getLikes(req, res) {
         }
 
         if (likes.rows[0].count === '1'){
-            if (userLikes.rows.length !== 0){
+            if (userLikes.rows.length === 0){
                 return res.send({
                     count: 1,
                     text: `Somente ${postLikers.rows[0].username} curtiu!`,
@@ -63,7 +63,7 @@ export async function getLikes(req, res) {
         }
 
         if (likes.rows[0].count === '2'){
-            if (userLikes.rows.length !== 0){
+            if (userLikes.rows.length === 0){
                 return res.send({
                     count: 2,
                     text: `${postLikers.rows[0].username} e ${postLikers.rows[1].username} curtiram!`,
@@ -84,7 +84,7 @@ export async function getLikes(req, res) {
 
             const others = Number(likes.rows[0].count) - 2;
 
-            if (userLikes.rows.length !== 0){
+            if (userLikes.rows.length === 0){
                 return res.send({
                     count: Number(likes.rows[0].count),
                     text: `${postLikers.rows[0].username}, ${postLikers.rows[1].username} outras ${others} pessoas`,
