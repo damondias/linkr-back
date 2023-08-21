@@ -37,7 +37,8 @@ export async function getLikes(req, res) {
         if (likes.rowCount === 0){
             return res.send({
                 count: 0,
-                text: "Ningúem curtiu ainda!"
+                text: "Ningúem curtiu ainda!",
+                user: 0
             })
         }
 
@@ -45,12 +46,14 @@ export async function getLikes(req, res) {
             if (userLikes.rowCount === 0){
                 return res.send({
                     count: 1,
-                    text: `Somente ${postLikers.rows[0].username} curtiu!`
+                    text: `Somente ${postLikers.rows[0].username} curtiu!`,
+                    user: 0
                 })
             }else{
                 return res.send({
                     count: 1,
-                    text: `Somente você curtiu!`
+                    text: `Somente você curtiu!`,
+                    user: 1
                 })
             }
         }
@@ -59,12 +62,14 @@ export async function getLikes(req, res) {
             if (userLikes.rowCount === 0){
                 return res.send({
                     count: 2,
-                    text: `${postLikers.rows[0].username} e ${postLikers.rows[1].username} curtiram!`
+                    text: `${postLikers.rows[0].username} e ${postLikers.rows[1].username} curtiram!`,
+                    user: 0
                 })
             }else{
                 return res.send({
                     count: 2,
-                    text: `Você e ${postLikers.rows[0].username} curtiram!`
+                    text: `Você e ${postLikers.rows[0].username} curtiram!`,
+                    user: 1
                 })
             }
         }
@@ -76,12 +81,14 @@ export async function getLikes(req, res) {
             if (userLikes.rowCount === 0){
                 return res.send({
                     count: likes.rows.length,
-                    text: `${postLikers.rows[0].username}, ${postLikers.rows[1].username} outras ${others} pessoas`
+                    text: `${postLikers.rows[0].username}, ${postLikers.rows[1].username} outras ${others} pessoas`,
+                    user: 0
                 })
             }else{
                 return res.send({
                     count: likes.rows.length,
-                    text: `Você, ${postLikers.rows[0].username} e outras ${others} pessoas`
+                    text: `Você, ${postLikers.rows[0].username} e outras ${others} pessoas`,
+                    user: 1
                 })
             }
         }
