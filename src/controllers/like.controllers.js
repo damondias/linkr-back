@@ -49,14 +49,14 @@ export async function getLikes(req, res) {
                 return res.send({
                     count: 1,
                     text: `Somente ${postLikers.rows[0].username} curtiu!`,
-                    user: userId,
+                    liked: null,
                     likes: postLikers.rows
                 })
             }else{
                 return res.send({
                     count: 1,
                     text: `Somente você curtiu!`,
-                    user: userId,
+                    liked: postId,
                     likes: postLikers.rows
                 })
             }
@@ -67,14 +67,14 @@ export async function getLikes(req, res) {
                 return res.send({
                     count: 2,
                     text: `${postLikers.rows[0].username} e ${postLikers.rows[1].username} curtiram!`,
-                    user: userId,
+                    liked: null,
                     likes: postLikers.rows
                 })
             }else{
                 return res.send({
                     count: 2,
                     text: `Você e ${postLikers.rows[0].username} curtiram!`,
-                    user: userId,
+                    liked: postId,
                     likes: postLikers.rows
                 })
             }
@@ -88,14 +88,14 @@ export async function getLikes(req, res) {
                 return res.send({
                     count: Number(likes.rows[0].count),
                     text: `${postLikers.rows[0].username}, ${postLikers.rows[1].username} outras ${others} pessoas`,
-                    user: userId,
+                    liked: null,
                     likes: postLikers.rows
                 })
             }else{
                 return res.send({
                     count: Number(likes.rows[0].count),
                     text: `Você, ${postLikers.rows[0].username} e outras ${others} pessoas`,
-                    user: userId,
+                    liked: postId,
                     likes: postLikers.rows
                 })
             }
