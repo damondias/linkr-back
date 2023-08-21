@@ -54,12 +54,29 @@ async function deletePostHash(postId) {
       `, [postId]);
   }          
 
+async function editPost(postId, userId, userMessage) {
+    return db.query(`   
+    UPDATE posts
+	    SET  message=$1 
+	    WHERE posts.id = $2 AND "userId"=$3
+    `, [userMessage, postId, userId]);
+}
+
+async function searchUserId(postId) {
+    return db.query(`   
+    SELECT 
+	    posts."userId"
+    FROM posts
+	    WHERE posts.id=$1
+    `, [postId]);
+}
 export const postsRepository ={
     publishPost,
     findPosts,
     deletePost,
     deletePostLike,
     deletePostHash,
-    
+    editPost,
+    searchUserId,    
 }
 

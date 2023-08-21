@@ -51,3 +51,21 @@ export async function deletePost(req, res) {
         res.status(500).send(error);
     }
 }
+
+export async function editPost(req, res) {
+    const { postId } = req.params;
+    const { url, userMessage } = req.body;
+    const { id: userId } = res.locals.user;
+
+    try {
+        const { rows: data } = await postsRepository.searchUserId(postId);
+        if (data[0].userId !== userId) return res.sendStatus(401);
+
+        const result = await postsRepository.editPost(postId, userId, userMessage);
+        res.status(200).send(result);
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error);
+    }
+}
