@@ -37,12 +37,12 @@ export async function queryPostLikers(postId) {
 
 }
 
-export async function queryUserLikes(userId, postId) {
+export async function queryUserLikes(userId) {
 
     return db.query(`
         SELECT *
         FROM likes
-        WHERE "postId" = $1 AND "userId" = $2
-    `, [postId, userId])
+        WHERE "userId" = $1
+    ;`, [userId])
 
 }

@@ -32,7 +32,7 @@ export async function getLikes(req, res) {
 
         const likes = await queryGetLikes(postId);
         const postLikers = await queryPostLikers(postId);
-        const userLikes = await queryUserLikes(postId, userId);
+        const userLikes = await queryUserLikes(userId);
 
         console.log(userLikes)
 
@@ -56,7 +56,7 @@ export async function getLikes(req, res) {
                 return res.send({
                     count: 1,
                     text: `Somente você curtiu!`,
-                    liked: postId,
+                    liked: userLikes.rows,
                     likes: postLikers.rows
                 })
             }
@@ -74,7 +74,7 @@ export async function getLikes(req, res) {
                 return res.send({
                     count: 2,
                     text: `Você e ${postLikers.rows[0].username} curtiram!`,
-                    liked: postId,
+                    liked: userLikes.rows,
                     likes: postLikers.rows
                 })
             }
@@ -95,7 +95,7 @@ export async function getLikes(req, res) {
                 return res.send({
                     count: Number(likes.rows[0].count),
                     text: `Você, ${postLikers.rows[0].username} e outras ${others} pessoas`,
-                    liked: postId,
+                    liked: userLikes.rows,
                     likes: postLikers.rows
                 })
             }
