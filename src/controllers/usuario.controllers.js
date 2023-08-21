@@ -52,7 +52,6 @@ export async function login(req, res){
 
         const user = verificadorLogin.rows[0];
 
-
         const passwordCorreta = await bcrypt.compare(password, user.password);
 
         if (!passwordCorreta) {
@@ -63,7 +62,7 @@ export async function login(req, res){
 
         const login = await db.query('INSERT INTO sessions ("userId", token) VALUES ($1, $2);', [user.id, token])
 
-        res.status(200).send({token, image: user.image})
+        res.status(200).send({token, image: user.image, userId: user.id})
 
     } catch(err){
         res.status(500).send({ErrorLogin: err.message});
