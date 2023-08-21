@@ -2,7 +2,7 @@ import { db } from "../database/database.connection.js";
 
 export async function queryVerifyLike(userId, postId) {
 
-    return db.query(`SELECT * FROM likes WHERE "userId"=$1 AND "postId"=$2);`, [userId, postId]);
+    return db.query(`SELECT * FROM likes WHERE "userId"=$1 AND "postId"=$2;`, [userId, postId]);
 }
 
 export async function queryLike(userId, postId) {
@@ -19,10 +19,9 @@ export async function queryDislike(userId, postId) {
 export async function queryGetLikes(postId) {
 
     return db.query(`
-        SELECT "postId", COUNT("userId")
+        SELECT COUNT("userId")
         FROM likes
         WHERE "postId" = $1
-        GROUP BY "postId"
     `, [postId])
 
 }
@@ -44,6 +43,6 @@ export async function queryUserLikes(userId, postId) {
         SELECT *
         FROM likes
         WHERE "postId" = $1 AND "userId" = $2
-    `, [userId, postId])
+    `, [postId, userId])
 
 }

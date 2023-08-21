@@ -24,7 +24,7 @@ export async function like(req, res) {
 export async function getLikes(req, res) {
     
     const user = res.locals.user
-    const userId = user.userId
+    const userId = user.id
 
     const { postId } = req.params
 
@@ -34,64 +34,68 @@ export async function getLikes(req, res) {
         const postLikers = await queryPostLikers(postId);
         const userLikes = await queryUserLikes(postId, userId);
 
-        if (likes.rowCount === 0){
+        console.log(userLikes)
+
+        if (likes.rows[0].count === '0'){
             return res.send({
                 count: 0,
                 text: "Ningúem curtiu ainda!",
-                user: 0
+                user: null
             })
         }
 
-        if (likes.rowCount === 1){
+        if (likes.rows[0].count === '1'){
             if (userLikes.rowCount === 0){
                 return res.send({
                     count: 1,
                     text: `Somente ${postLikers.rows[0].username} curtiu!`,
-                    user: 0
+                    user: null
                 })
             }else{
                 return res.send({
                     count: 1,
                     text: `Somente você curtiu!`,
-                    user: 1
+                    user: postId
                 })
             }
         }
 
-        if (likes.rowCount === 2){
+        if (likes.rows[0].count === '2'){
             if (userLikes.rowCount === 0){
                 return res.send({
                     count: 2,
                     text: `${postLikers.rows[0].username} e ${postLikers.rows[1].username} curtiram!`,
-                    user: 0
+                    user: null
                 })
             }else{
                 return res.send({
                     count: 2,
                     text: `Você e ${postLikers.rows[0].username} curtiram!`,
-                    user: 1
+                    user: postId
                 })
             }
         }
 
-        if (likes.rowCount > 2){
+        if (likes.rows[0].count > '2'){
 
-            const others = likes.rows.length - 2;
+            const others = Number(likes.rows[0].count) - 2;
 
             if (userLikes.rowCount === 0){
                 return res.send({
-                    count: likes.rows.length,
+                    count: Number(likes.rows[0].count),
                     text: `${postLikers.rows[0].username}, ${postLikers.rows[1].username} outras ${others} pessoas`,
-                    user: 0
+                    user: null
                 })
             }else{
                 return res.send({
-                    count: likes.rows.length,
+                    count: Number(likes.rows[0].count),
                     text: `Você, ${postLikers.rows[0].username} e outras ${others} pessoas`,
-                    user: 1
+                    user: postId
                 })
             }
         }
+
+        res.send('erro')
 
     } catch (err) {
         res.status(500).send(err.message)
