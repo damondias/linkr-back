@@ -24,9 +24,42 @@ function findPosts(limit) {
     `, [limit]);
 }
 
+async function deletePost(postId) {
+    return db.query(`
+        DELETE
+        FROM
+            posts
+        WHERE
+            id = $1
+    `, [postId]);
+}
+
+async function deletePostLike(postId) {
+    return db.query(`
+        DELETE
+        FROM
+            likes
+        WHERE
+            "postId" = $1
+    `, [postId]);
+}
+
+async function deletePostHash(postId) {
+    return db.query(`
+          DELETE
+          FROM
+              hashtagpost
+          WHERE
+              "postId" = $1
+      `, [postId]);
+  }          
+
 export const postsRepository ={
     publishPost,
     findPosts,
+    deletePost,
+    deletePostLike,
+    deletePostHash,
     
 }
 

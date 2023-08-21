@@ -34,3 +34,18 @@ export async function getPosts(req, res){
         res.status(500).send(error.message)
     }
 }
+
+export async function deletePost(req, res) {
+    const { postId } = req.params;
+
+    try {
+        await postsRepository.deletePostLike(postId);
+        await postsRepository.deletePostHash(postId);
+        await postsRepository.deletePost(postId);
+
+        res.status(200).send("Post deleted");
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error);
+    }
+}
