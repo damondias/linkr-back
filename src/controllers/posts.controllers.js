@@ -1,6 +1,7 @@
 import fetch from 'node-fetch';
 import urlMetadata from "url-metadata"
 import { postsRepository } from "../repositories/posts.repository.js";
+import { makeHashtag } from './hashtag.controllers.js';
 
 export async function createPost(req,res) {
     const { url, userMessage } = req.body;
@@ -14,7 +15,8 @@ export async function createPost(req,res) {
         const urlDescription = metadata?.description;
         const urlImage = metadata?.image;
 
-        await postsRepository.publishPost( userId, userMessage, url, urlTitle, urlDescription, urlImage);
+        let resp = await postsRepository.publishPost( userId, userMessage, url, urlTitle, urlDescription, urlImage);
+        await makeHashtag(userMessage,resp.rows[0].id)
         res.sendStatus(201);    
     } catch (error) {
         res.status(500).send(error.message)

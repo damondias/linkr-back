@@ -15,3 +15,7 @@ export async function getPostsHashTag(hashtag){
 export async function createHashtag(hashtag){
     return db.query(`INSERT INTO hashtags (tag) VALUES ($1) RETURNING id`,[hashtag])
 }
+
+export async function linkHashtagPost(hashtagId,postId){
+    return db.query(`INSERT INTO hashtagpost ("hashtagId","postId") VALUES ($1,$2)`,[hashtagId,postId])
+}
