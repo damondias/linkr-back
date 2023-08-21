@@ -1,4 +1,4 @@
-import { queryDislike, queryGetLikes, queryUserLikes, queryLike, queryPostLikers } from "../repositories/like.repository.js";
+import { queryDislike, queryGetLikes, queryUserLikes, queryLike, queryPostLikers, queryVerifyLike } from "../repositories/like.repository.js";
 
 export async function like(req, res) {
 
@@ -6,22 +6,15 @@ export async function like(req, res) {
 
     try {
 
-        await queryLike(userId, postId);
+        const verifyLike = await queryVerifyLike(userId, postId);
 
-        res.send(200);
-
-    } catch (err) {
-        res.status(500).send(err.message);
-    }
-}
-
-export async function dislike(req, res) {
-
-    const { userId, postId } = req.body;
-
-    try {
-
-        await queryDislike(userId, postId);
+        if (verifyLike.rowCount === 0){
+            await queryLike(userId, postId);
+            res.send(200);
+        }else{
+            await queryDislike(userId, postId);
+            res.send(200);
+        }  
 
     } catch (err) {
         res.status(500).send(err.message);
