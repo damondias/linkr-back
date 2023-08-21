@@ -32,26 +32,20 @@ export async function getLikes(req, res) {
 
         const likes = await queryGetLikes(postId);
         const postLikers = await queryPostLikers(postId);
-        const userLikes = await queryUserLikes(userId);
+        const userLikes = await queryUserLikes(userId, postId);
 
-        const id = [];
-
-        for (let i = 0; i < userLikes.length; i++){
-            id.push(userLikes[i].userId)
-        }
-
-        console.log(id)
+        console.log(likes.rows[0])
 
         if (likes.rows[0].count === '0'){
             return res.send({
                 count: 0,
-                text: "Ningúem curtiu ainda!",
+                text: "Ninguém curtiu ainda!",
                 user: userId
             })
         }
 
         if (likes.rows[0].count === '1'){
-            if (id.includes(userId)){
+            if (userLikes.rows.length === 0){
                 return res.send({
                     count: 1,
                     text: `Somente ${postLikers.rows[0].username} curtiu!`,
@@ -62,14 +56,14 @@ export async function getLikes(req, res) {
                 return res.send({
                     count: 1,
                     text: `Somente você curtiu!`,
-                    userLiked: userLikes.rows,
+                    userLiked: 1,
                     likes: postLikers.rows
                 })
             }
         }
 
         if (likes.rows[0].count === '2'){
-            if (id.includes(userId)){
+            if (userLikes.rows.length === 0){
                 return res.send({
                     count: 2,
                     text: `${postLikers.rows[0].username} e ${postLikers.rows[1].username} curtiram!`,
@@ -80,7 +74,7 @@ export async function getLikes(req, res) {
                 return res.send({
                     count: 2,
                     text: `Você e ${postLikers.rows[0].username} curtiram!`,
-                    userLiked: userLikes.rows,
+                    userLiked: 1,
                     likes: postLikers.rows
                 })
             }
@@ -90,7 +84,7 @@ export async function getLikes(req, res) {
 
             const others = Number(likes.rows[0].count) - 2;
 
-            if (id.includes(userId)){
+            if (userLikes.rows.length === 0){
                 return res.send({
                     count: Number(likes.rows[0].count),
                     text: `${postLikers.rows[0].username}, ${postLikers.rows[1].username} outras ${others} pessoas`,
@@ -101,7 +95,7 @@ export async function getLikes(req, res) {
                 return res.send({
                     count: Number(likes.rows[0].count),
                     text: `Você, ${postLikers.rows[0].username} e outras ${others} pessoas`,
-                    userLiked: userLikes.rows,
+                    userLiked: 1,
                     likes: postLikers.rows
                 })
             }
