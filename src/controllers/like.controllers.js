@@ -56,7 +56,7 @@ export async function getLikes(req, res) {
                 return res.send({
                     count: 1,
                     text: `Somente você curtiu!`,
-                    userLiked: userLikes.rows,
+                    userLiked: 1,
                     likes: postLikers.rows
                 })
             }
@@ -74,7 +74,7 @@ export async function getLikes(req, res) {
                 return res.send({
                     count: 2,
                     text: `Você e ${postLikers.rows[0].username} curtiram!`,
-                    userLiked: userLikes.rows,
+                    userLiked: 1,
                     likes: postLikers.rows
                 })
             }
@@ -95,7 +95,7 @@ export async function getLikes(req, res) {
                 return res.send({
                     count: Number(likes.rows[0].count),
                     text: `Você, ${postLikers.rows[0].username} e outras ${others} pessoas`,
-                    userLiked: userLikes.rows,
+                    userLiked: 1,
                     likes: postLikers.rows
                 })
             }
