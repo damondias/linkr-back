@@ -18,7 +18,7 @@ export async function cadastro(req, res) {
             [email, bcryptpassword, username, image]
         );
 
-        console.log("Cadastro inserido com sucesso:", cadastro);
+        console.log("Cadastro inserido com sucesso:", cadastro.rows[0]);
 
 
         // const cadastroId = cadastro.rows[0].id;
@@ -63,7 +63,7 @@ export async function login(req, res){
 
         const login = await db.query('INSERT INTO sessions ("userId", token) VALUES ($1, $2);', [user.id, token])
 
-        res.status(200).send({token})
+        res.status(200).send({token, image: user.image})
 
     } catch(err){
         res.status(500).send({ErrorLogin: err.message});
