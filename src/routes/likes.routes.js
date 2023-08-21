@@ -8,6 +8,6 @@ likeRouter.use(validateAuth) // rota autenticada
 
 likeRouter.post("/like", like);
 likeRouter.post("/dislike", dislike);
-likeRouter.get("/likes", getLikes);
+likeRouter.get("/likes/:postId", getLikes);
 
 export default likeRouter;
