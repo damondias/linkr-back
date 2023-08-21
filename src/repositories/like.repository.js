@@ -22,7 +22,7 @@ export async function queryGetLikes(postId) {
         SELECT "postId", COUNT("userId")
         FROM likes
         WHERE "postId" = $1
-        GROUP BY postId 
+        GROUP BY "postId"
     `, [postId])
 
 }
@@ -32,7 +32,7 @@ export async function queryPostLikers(postId) {
     return db.query(`
         SELECT users.username, users.id
         FROM users
-        JOIN likes ON likes."userId" = user.id
+        JOIN likes ON likes."userId" = users.id
         WHERE likes."postId" = $1
     `, [postId])
 
