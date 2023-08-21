@@ -10,10 +10,10 @@ export async function like(req, res) {
 
         if (verifyLike.rowCount === 0){
             await queryLike(userId, postId);
-            res.send(200);
+            res.sendStatus(200);
         }else{
             await queryDislike(userId, postId);
-            res.send(200);
+            res.sendStatus(200);
         }  
 
     } catch (err) {
@@ -40,7 +40,7 @@ export async function getLikes(req, res) {
             return res.send({
                 count: 0,
                 text: "Ningúem curtiu ainda!",
-                user: null
+                user: userId
             })
         }
 
@@ -49,13 +49,15 @@ export async function getLikes(req, res) {
                 return res.send({
                     count: 1,
                     text: `Somente ${postLikers.rows[0].username} curtiu!`,
-                    user: null
+                    user: userId,
+                    likes: postLikers.rows
                 })
             }else{
                 return res.send({
                     count: 1,
                     text: `Somente você curtiu!`,
-                    user: postId
+                    user: userId,
+                    likes: postLikers.rows
                 })
             }
         }
@@ -65,13 +67,15 @@ export async function getLikes(req, res) {
                 return res.send({
                     count: 2,
                     text: `${postLikers.rows[0].username} e ${postLikers.rows[1].username} curtiram!`,
-                    user: null
+                    user: userId,
+                    likes: postLikers.rows
                 })
             }else{
                 return res.send({
                     count: 2,
                     text: `Você e ${postLikers.rows[0].username} curtiram!`,
-                    user: postId
+                    user: userId,
+                    likes: postLikers.rows
                 })
             }
         }
@@ -84,13 +88,15 @@ export async function getLikes(req, res) {
                 return res.send({
                     count: Number(likes.rows[0].count),
                     text: `${postLikers.rows[0].username}, ${postLikers.rows[1].username} outras ${others} pessoas`,
-                    user: null
+                    user: userId,
+                    likes: postLikers.rows
                 })
             }else{
                 return res.send({
                     count: Number(likes.rows[0].count),
                     text: `Você, ${postLikers.rows[0].username} e outras ${others} pessoas`,
-                    user: postId
+                    user: userId,
+                    likes: postLikers.rows
                 })
             }
         }
