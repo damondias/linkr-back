@@ -1,4 +1,4 @@
-import { queryComment, queryCountComments, queryGetComments } from "../repositories/comment.repository"
+import { queryComment, queryCountComments, queryGetCommentUser, queryGetComments } from "../repositories/comment.repository"
 
 export async function getComments (req, res){
 
@@ -26,6 +26,8 @@ export async function comment (req, res){
     try{
 
         await queryComment(userId, postId, text);
+
+        res.sendStatus(201)
 
     }catch (err){
         res.status(500).send(err.message)
