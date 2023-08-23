@@ -2,7 +2,13 @@ import { db } from "../database/database.connection.js";
 
 export async function queryGetComments (postId){
 
-    return db.query(`SELECT * FROM comments WHERE "postId"=$1;`, [postId])
+    return db.query(`
+    SELECT comments.*, users.username AS name, users.image
+    FROM comments 
+    JOIN users ON comments."userId" = users.id
+    WHERE "postId"=$1;
+    ORDER BY comments.id DESC
+    `, [postId])
 
 }
 
