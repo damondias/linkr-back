@@ -11,9 +11,9 @@ export async function getComments (req, res){
 
         const comments = await queryGetComments(postId);
         const count = await queryCountComments(postId);
-        const followers = await queryIsFollowing (userId)
+        const following = await queryIsFollowing (userId)
 
-        res.send({countComment: count, comments: comments.rows, followers: followers})
+        res.send({countComment: count, comments: comments.rows, following: following})
 
     }catch (err){
         res.status(500).send(err.message)
