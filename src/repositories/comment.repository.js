@@ -21,6 +21,16 @@ export async function queryCountComments (postId){
     ;`, [postId])
 }
 
+export async function queryIsFollowing (userId){
+
+    return db.query(`
+        SELECT * 
+        FROM followers
+        WHERE "followerId" = "userId"
+    ;`, [userId])
+
+}
+
 export async function queryComment (userId, postId, text){
 
     return db.query(`INSERT INTO comments ("userId", "postId", "text") VALUES ($1, $2, $3);`, [userId, postId, text])

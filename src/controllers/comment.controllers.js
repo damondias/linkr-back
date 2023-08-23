@@ -1,6 +1,9 @@
-import { queryComment, queryCountComments, queryGetCommentUser, queryGetComments } from "../repositories/comment.repository"
+import { queryComment, queryCountComments, queryGetCommentUser, queryGetComments, queryIsFollowing } from "../repositories/comment.repository"
 
 export async function getComments (req, res){
+
+    const user = res.locals.user
+    const userId = user.id
 
     const { postId } = req.params;
 
@@ -8,8 +11,9 @@ export async function getComments (req, res){
 
         const comments = await queryGetComments(postId);
         const count = await queryCountComments(postId);
+        const followers = await queryIsFollowing (userId)
 
-        res.send({countComment: count, comments: comments.rows})
+        res.send({countComment: count, comments: comments.rows, followers: followers})
 
     }catch (err){
         res.status(500).send(err.message)
