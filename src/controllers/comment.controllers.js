@@ -9,7 +9,7 @@ export async function getComments (req, res){
         const comments = await queryGetComments(postId);
         const count = await queryCountComments(postId);
 
-        res.send({count: count, comments: comments})
+        res.send({countComment: count, comments: comments.rows})
 
     }catch (err){
         res.status(500).send(err.message)
@@ -21,7 +21,9 @@ export async function comment (req, res){
     const user = res.locals.user
     const userId = user.id
 
-    const { postId, text } = req.body;
+    const { postId } = req.params
+
+    const { text } = req.body;
 
     try{
 

@@ -7,6 +7,6 @@ const commentRouter = Router();
 commentRouter.use(validateAuth);
 
 commentRouter.get('/comments/:postId', getComments);
-commentRouter.post('/comment', comment);
+commentRouter.post('/comment/:postId', comment);
 
 export default commentRouter;
