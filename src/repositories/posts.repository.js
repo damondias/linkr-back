@@ -8,7 +8,7 @@ async function publishPost(userId, userMessage, url, urlTitle, urlDescription, u
     `, [userId, userMessage, url, urlTitle, urlDescription, urlImage]);
 }
 
-function findPosts(limit) {
+function findPosts(limit, offset) {
     return db.query(`
         SELECT 
             p.*,
@@ -20,8 +20,10 @@ function findPosts(limit) {
             users u
                 ON u.id = p."userId"
         ORDER BY
-            p.id DESC LIMIT $1
-    `, [limit]);
+            p.id DESC 
+            LIMIT $1
+            OFFSET $2
+    `, [limit, offset]);
 }
 
 async function deletePost(postId) {
