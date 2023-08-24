@@ -1,4 +1,4 @@
-import { queryComment, queryCountComments, queryGetCommentUser, queryGetComments, queryIsFollowing } from "../repositories/comment.repository"
+import { queryComment, queryCountComments, queryGetComments, queryIsFollowing } from "../repositories/comment.repository.js"
 
 export async function getComments (req, res){
 
