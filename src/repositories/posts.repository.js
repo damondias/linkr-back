@@ -8,7 +8,7 @@ async function publishPost(userId, userMessage, url, urlTitle, urlDescription, u
     `, [userId, userMessage, url, urlTitle, urlDescription, urlImage]);
 }
 
-function findPosts(limit) {
+function findPosts(limit, offset) {
     return db.query(`
     SELECT posts.*, null AS "postId", null AS "repUserId", c.reposts, u.username, u.image AS "profilePic" FROM posts
     LEFT JOIN (SELECT "postId", COUNT("postId") AS "reposts" FROM repost
