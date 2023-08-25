@@ -25,8 +25,8 @@ function findPosts(limit,userId,offset) {
 	FULL JOIN followers AS f ON repost."userId" = f."followedId"
 	WHERE (posts."userId"=$2 AND (repost."userId"=null OR repost."userId"=$2)) OR f."followerId" = $2
     ORDER BY "createdAt" DESC,
-    id DESC LIMIT $1
-    `, [limit,userId]);
+    id DESC LIMIT $1 OFFSET $3
+    `, [limit,userId,offset]);
 }
 
 async function deletePost(postId) {
