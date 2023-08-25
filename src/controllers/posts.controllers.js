@@ -65,6 +65,9 @@ export async function editPost(req, res) {
         const result = await postsRepository.editPost(postId, userId, userMessage);
         res.status(200).send(result);
 
+        await postsRepository.deletePostHash(postId);
+        await makeHashtag(userMessage,postId)
+
     } catch (error) {
         console.log(error);
         res.status(500).send(error);

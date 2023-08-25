@@ -10,20 +10,20 @@ async function publishPost(userId, userMessage, url, urlTitle, urlDescription, u
 
 function findPosts(limit, offset) {
     return db.query(`
-        SELECT 
-            p.*,
-            u.username,
-            u.image AS "profilePic"
-        FROM 
-            posts p
-        LEFT JOIN
-            users u
-                ON u.id = p."userId"
-        ORDER BY
-            p.id DESC 
-            LIMIT $1
-            OFFSET $2
-    `, [limit, offset]);
+    SELECT posts.*, null AS "postId", null AS "repUserId", c.reposts, u.username, u.image AS "profilePic" FROM posts
+    LEFT JOIN (SELECT "postId", COUNT("postId") AS "reposts" FROM repost
+    GROUP BY "postId") AS c ON c."postId" = posts.id
+    LEFT JOIN users AS u ON u.id = posts."userId"
+    UNION
+    SELECT posts.id,posts."userId",posts.message,posts.url,posts."urlTitle",posts."urlDescription",posts."urlImage",
+    repost."createdAt",repost."postId", repost."userId" AS "repUserId", c.reposts, u.username, u.image AS "profilePic" FROM posts
+    JOIN repost ON repost."postId" = posts.id
+    JOIN (select "postId", COUNT("postId") AS "reposts" FROM repost
+    GROUP BY "postId") AS c ON c."postId" = posts.id
+    LEFT JOIN users AS u ON u.id = posts."userId"
+    ORDER BY "createdAt" DESC,
+    id DESC LIMIT $1
+    `, [limit]);
 }
 
 async function deletePost(postId) {
