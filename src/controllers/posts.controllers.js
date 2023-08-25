@@ -73,3 +73,15 @@ export async function editPost(req, res) {
         res.status(500).send(error);
     }
 }
+
+export async function repostPost(req,res){
+    const {postId} = req.params
+    const { id: userId } = res.locals.user;
+
+    try {
+        await postsRepository.createRepost(postId,userId)
+        res.sendStatus(201)
+    } catch (err) {
+        res.status(500).send(err.message)
+    }
+}

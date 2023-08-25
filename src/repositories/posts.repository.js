@@ -72,6 +72,14 @@ async function searchUserId(postId) {
 	    WHERE posts.id=$1
     `, [postId]);
 }
+
+async function createRepost(postId,userId){
+    return db.query(`
+    INSERT INTO repost ("postId","userId")
+    VALUES ($1,$2)
+    `,[postId,userId]);
+}
+
 export const postsRepository ={
     publishPost,
     findPosts,
@@ -79,6 +87,7 @@ export const postsRepository ={
     deletePostLike,
     deletePostHash,
     editPost,
-    searchUserId,    
+    searchUserId,
+    createRepost    
 }
 
