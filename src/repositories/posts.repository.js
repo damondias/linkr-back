@@ -15,6 +15,7 @@ function findPosts(limit,userId,offset) {
     GROUP BY "postId") AS c ON c."postId" = posts.id
     LEFT JOIN users AS u ON u.id = posts."userId"
 	FULL JOIN followers AS f ON posts."userId" = f."followedId"
+	WHERE posts."userId"=$2 or f."followerId" = $2
     UNION
     SELECT posts.id,posts."userId",posts.message,posts.url,posts."urlTitle",posts."urlDescription",posts."urlImage",
     repost."createdAt",repost."postId", repost."userId" AS "repUserId", c.reposts, u.username, u.image AS "profilePic", f."followerId" FROM posts
@@ -23,7 +24,7 @@ function findPosts(limit,userId,offset) {
     GROUP BY "postId") AS c ON c."postId" = posts.id
     LEFT JOIN users AS u ON u.id = posts."userId"
 	FULL JOIN followers AS f ON repost."userId" = f."followedId"
-	WHERE (posts."userId"=$2 AND (repost."userId"=null OR repost."userId"=$2)) OR f."followerId" = $2
+	WHERE repost."userId"=$2 or f."followerId"=$2
     ORDER BY "createdAt" DESC,
     id DESC LIMIT $1 OFFSET $3
     `, [limit,userId,offset]);
