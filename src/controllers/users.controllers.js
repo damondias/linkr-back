@@ -16,7 +16,7 @@ export async function getUserById(req,res){
 }
 
 export async function getUserByName(req,res){
-    const {username} = req.params
+    const {username} = req.query
     let userName = username+"%"
 
     try {

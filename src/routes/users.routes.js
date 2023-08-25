@@ -6,6 +6,6 @@ import { getUserById, getUserByName } from "../controllers/users.controllers.js"
 const UsersRouter = Router()
 
 UsersRouter.get("/user/:id",validateParamSchema(UsersId),getUserById)
-UsersRouter.get("/users/find/:username",validateParamSchema(UsersName),getUserByName)
+UsersRouter.get("/users/find/",getUserByName)
 
 export default UsersRouter

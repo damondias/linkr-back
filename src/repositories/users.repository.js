@@ -11,6 +11,8 @@ export async function getUserPosts(id, limit, offset){
 }
 
 export async function getUserIdByName(username){
-    return db.query(`SELECT users.image, users.username, users.id from users
-        WHERE username ILIKE $1`,[username])
+    return db.query(`SELECT users.image, users.username, users.id, f."followedId" from users
+        LEFT JOIN followers AS f ON f."followerId" = users.id
+        WHERE username ILIKE $1
+        ORDER BY f."followerId" ASC LIMIT 10`,[username])
 }
