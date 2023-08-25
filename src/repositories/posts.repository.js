@@ -8,22 +8,25 @@ async function publishPost(userId, userMessage, url, urlTitle, urlDescription, u
     `, [userId, userMessage, url, urlTitle, urlDescription, urlImage]);
 }
 
-function findPosts(limit, offset) {
+function findPosts(limit,userId,offset) {
     return db.query(`
-    SELECT posts.*, null AS "postId", null AS "repUserId", c.reposts, u.username, u.image AS "profilePic" FROM posts
+    SELECT posts.*, null AS "postId", null AS "repUserId", c.reposts, u.username, u.image AS "profilePic", f."followerId" FROM posts
     LEFT JOIN (SELECT "postId", COUNT("postId") AS "reposts" FROM repost
     GROUP BY "postId") AS c ON c."postId" = posts.id
     LEFT JOIN users AS u ON u.id = posts."userId"
+	FULL JOIN followers AS f ON posts."userId" = f."followedId"
     UNION
     SELECT posts.id,posts."userId",posts.message,posts.url,posts."urlTitle",posts."urlDescription",posts."urlImage",
-    repost."createdAt",repost."postId", repost."userId" AS "repUserId", c.reposts, u.username, u.image AS "profilePic" FROM posts
+    repost."createdAt",repost."postId", repost."userId" AS "repUserId", c.reposts, u.username, u.image AS "profilePic", f."followerId" FROM posts
     JOIN repost ON repost."postId" = posts.id
     JOIN (select "postId", COUNT("postId") AS "reposts" FROM repost
     GROUP BY "postId") AS c ON c."postId" = posts.id
     LEFT JOIN users AS u ON u.id = posts."userId"
+	FULL JOIN followers AS f ON repost."userId" = f."followedId"
+	WHERE (posts."userId"=$2 AND (repost."userId"=null OR repost."userId"=$2)) OR f."followerId" = $2
     ORDER BY "createdAt" DESC,
-    id DESC LIMIT $1
-    `, [limit]);
+    id DESC LIMIT $1 OFFSET $3
+    `, [limit,userId,offset]);
 }
 
 async function deletePost(postId) {
