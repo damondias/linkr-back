@@ -6,7 +6,7 @@ export async function queryGetComments (postId){
     SELECT comments.*, users.username AS name, users.image
     FROM comments 
     JOIN users ON comments."userId" = users.id
-    WHERE "postId"=$1;
+    WHERE "postId"=$1
     ORDER BY comments.id DESC
     `, [postId])
 
@@ -26,7 +26,7 @@ export async function queryIsFollowing (userId){
     return db.query(`
         SELECT * 
         FROM followers
-        WHERE "followerId" = "userId"
+        WHERE "followerId" = $1
     ;`, [userId])
 
 }
