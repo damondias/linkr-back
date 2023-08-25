@@ -1,10 +1,13 @@
 import { createHashtag, getAllHashtags, getPostsHashTag, linkHashtagPost } from "../repositories/hastag.repository.js"
 
 export async function getHashtag(req,res){
-    const {hashtag} = req.params
+    const {hashtag} = req.params;
+
+    const { limit } = req.query;
+    const { offset } = req.query;
 
     try {
-        const {rows} = await getPostsHashTag(hashtag)
+        const {rows} = await getPostsHashTag(hashtag, limit, offset)
         if(rows.length==0) return res.sendStatus(404)
         res.status(200).send(rows)
     } catch (err) {
