@@ -26,9 +26,10 @@ export async function createPost(req,res) {
 export async function getPosts(req, res){
     const { limit } = req.params;
     const { offset } = req.query;
+    const { id: userId } = res.locals.user;
 
     try {
-        const {rowCount: existingPosts, rows: posts } = await postsRepository.findPosts(limit,offset);
+        const {rowCount: existingPosts, rows: posts } = await postsRepository.findPosts(limit,userId,offset);
         if ( existingPosts === 0)  return res.sendStatus(404);
 
         res.status(200).send(posts);
@@ -71,5 +72,17 @@ export async function editPost(req, res) {
     } catch (error) {
         console.log(error);
         res.status(500).send(error);
+    }
+}
+
+export async function repostPost(req,res){
+    const {postId} = req.params
+    const { id: userId } = res.locals.user;
+
+    try {
+        await postsRepository.createRepost(postId,userId)
+        res.sendStatus(201)
+    } catch (err) {
+        res.status(500).send(err.message)
     }
 }
