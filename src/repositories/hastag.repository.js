@@ -4,12 +4,15 @@ export async function getAllHashtags(){
     return db.query(`SELECT * from hashtags`)
 }
 
-export async function getPostsHashTag(hashtag){
+export async function getPostsHashTag(hashtag, limit, offset){
     return db.query(`SELECT posts.* FROM posts 
     JOIN hashtagPost ON posts.id = hashtagPost."postId"
     JOIN hashtags ON hashtagPost."postId" = hashtags.id
     WHERE hashtags.tag = $1
-    ORDER BY posts.id DESC`,[hashtag])
+    ORDER BY posts.id DESC
+    LIMIT $2
+    OFFSET $3
+    `,[hashtag, limit, offset])
 }
 
 export async function createHashtag(hashtag){
