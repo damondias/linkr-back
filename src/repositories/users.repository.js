@@ -9,7 +9,7 @@ export async function getUserPosts(id){
 
 export async function getUserIdByName(username){
     return db.query(`SELECT users.image, users.username, users.id, f."followedId" from users
-        LEFT JOIN followers AS f ON f."followerId" = users.id
+        LEFT JOIN followers AS f ON f."followedId" = users.id
         WHERE username ILIKE $1
         ORDER BY f."followerId" ASC LIMIT 10`,[username])
 }
