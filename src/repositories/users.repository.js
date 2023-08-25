@@ -1,5 +1,15 @@
 import { db } from "../database/database.connection.js";
 
+export async function getUserInfo(userId,id){
+    return db.query(`
+        SELECT users.image, users.username, users.id, case when f."followerId"=$1 then (true) else (false) end "follows"
+        from users
+        LEFT JOIN followers AS f ON f."followedId" = users.id
+        WHERE users.id = $2
+        ORDER BY follows desc
+    `,[userId,id])
+}
+
 export async function getUserPosts(id, limit, offset){
     return db.query(`SELECT posts.*, users.username, users.image FROM users
         JOIN posts ON users.id = posts."userId"
